@@ -176,6 +176,7 @@ type SmsProviderConfiguration struct {
 	Messagebird  MessagebirdProviderConfiguration `json:"messagebird"`
 	Textlocal    TextlocalProviderConfiguration   `json:"textlocal"`
 	Vonage       VonageProviderConfiguration      `json:"vonage"`
+	Custom       CustomProviderConfiguration      `json:"custom"`
 }
 
 type TwilioProviderConfiguration struct {
@@ -198,6 +199,11 @@ type VonageProviderConfiguration struct {
 	ApiKey    string `json:"api_key" split_words:"true"`
 	ApiSecret string `json:"api_secret" split_words:"true"`
 	From      string `json:"from" split_words:"true"`
+}
+
+type CustomProviderConfiguration struct {
+	Url    string `json:"url"`
+	Secret string `json:"secret"`
 }
 
 type CaptchaConfiguration struct {
@@ -441,6 +447,16 @@ func (t *VonageProviderConfiguration) Validate() error {
 	}
 	if t.From == "" {
 		return errors.New("missing Vonage 'from' parameter")
+	}
+	return nil
+}
+
+func (t *CustomProviderConfiguration) Validate() error {
+	if t.Url == "" {
+		return errors.New("missing URL endpoint")
+	}
+	if t.Secret == "" {
+		return errors.New("missing secret code")
 	}
 	return nil
 }
